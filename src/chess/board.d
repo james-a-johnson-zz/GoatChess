@@ -5,46 +5,15 @@
 
 module chess.board;
 
+import chess.defs;
+import chess.move;
 import chess.position;
-import chess.movegen;
 
 import std.conv;
 import std.format : formattedRead;
 import std.random : XorshiftEngine;
 import std.stdio;
 import std.string;
-
-alias U64 = ulong;
-
-// Colors
-enum WHITE = false;
-enum BLACK = true;
-
-// List of all the pieces. Used in the pieces array for the board.
-enum Piece : ubyte
-{
-    empty,
-    pawn,
-    knight,
-    bishop,
-    rook,
-    queen,
-    king,
-    Pawn,
-    Knight,
-    Bishop,
-    Rook,
-    Queen,
-    King
-}
-
-enum Castle : ubyte
-{
-    King  = 0b00000001,
-    Queen = 0b00000010,
-    king  = 0b00000100,
-    queen = 0b00001000
-}
 
 // TODO(jjohnson): Do I still need these?
 // Don't think I need these so they will be commented out for now.
@@ -274,6 +243,50 @@ class Board
         updateKey;
     }
 
+    void makeMove(Move m)
+    {
+        if (m.castle != 0)
+        {
+            if (m.castle == Castle.King)
+            {
+                pieces[7][6] = Piece.King;
+                pieces[7][4] = Piece.empty;
+                pieces[7][5] = Piece.Rook;
+                pieces[7][7] = Piece.empty;
+                castlePerm &= ~(Castle.King | Castle.Queen);
+            }
+            else if (m.castle == Castle.Queen)
+            {
+                pieces[7][2] = Piece.King;
+                pieces[7][4] = Piece.empty;
+                pieces[7][0] = Piece.empty;
+                pieces[7][5] = Piece.Rook;
+                castlePerm &= ~(Castle.King | Castle.Queen);
+            }
+            else if (m.castle == Castle.king)
+            {
+                pieces[0][6] = Piece.king;
+                pieces[0][4] = Piece.empty;
+                pieces[0][5] = Piece.Rook;
+                pieces[0][7] = Piece.empty;
+                castlePerm &= ~(Castle.king | Castle.Queen);
+            }
+            else if (m.castle == Castle.queen)
+            {
+                pieces[0][2] = Piece.king;
+                pieces[0][4] = Piece.empty;
+                pieces[0][0] = Piece.empty;
+                pieces[0][5] = Piece.rook;
+                castlePerm &= ~(Castle.king | Castle.queen);
+            }
+            else
+                throw new Exception("Invalid castle move.");
+
+            enPas.row = -1;
+            enPas.col = -1;
+        }
+    }
+
     void updateKey()
     {
         boardID = 0;
@@ -300,6 +313,8 @@ class Board
         return boardID;
     }
 
+    debug
+    {
     void print()
     {
         for (int i = 0; i < 8; i++)
@@ -364,5 +379,6 @@ class Board
         writeln("En Passant: ", enPas);
         writefln("Castle Permissions: %b", castlePerm);
         writefln("Board ID: %X", boardID);
+    }
     }
 }
