@@ -3,7 +3,7 @@ module chess.position;
 struct Position
 {
     int row;
-    int column;
+    int col;
 
     string toString() const
     {
@@ -11,7 +11,7 @@ struct Position
             return "None";
 
         string p = "";
-        p ~= 'a' + column;
+        p ~= 'a' + col;
         p ~= '8' - row;
         return p;
     }

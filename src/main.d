@@ -7,8 +7,4 @@ string welcome = "Welcome to GoatChess. Your one stop shop to playing chess agai
 void main()
 {
     writeln(welcome);
-
-    Board b = new Board();
-
-    b.print();
 }

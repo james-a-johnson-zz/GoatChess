@@ -6,6 +6,7 @@
 module chess.board;
 
 import chess.position;
+import chess.movegen;
 
 import std.conv;
 import std.format : formattedRead;
@@ -14,6 +15,10 @@ import std.stdio;
 import std.string;
 
 alias U64 = ulong;
+
+// Colors
+enum WHITE = false;
+enum BLACK = true;
 
 // List of all the pieces. Used in the pieces array for the board.
 enum Piece : ubyte
@@ -251,13 +256,13 @@ class Board
         if (fen[index] != '-')
         {
             enPas.row = (8 - (fen[index+1] - '0'));
-            enPas.column = (fen[index] - 'a');
+            enPas.col = (fen[index] - 'a');
             index += 2;
         }
         else
         {
             enPas.row = -1;
-            enPas.column = -1;
+            enPas.col = -1;
             index++;
         }
 
@@ -287,7 +292,7 @@ class Board
         boardID ^= castleKeys[castlePerm];
 
         if (enPas.row != -1)
-            boardID ^= enPasKeys[enPas.row][enPas.column];
+            boardID ^= enPasKeys[enPas.row][enPas.col];
     }
 
     U64 ID() @property

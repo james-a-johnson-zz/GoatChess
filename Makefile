@@ -1,6 +1,7 @@
 CC = ldc2
 FLAGS = -O2 -boundscheck=on -enable-asserts -enable-color -enable-inlining \
-		-enable-contracts -m64 -unittest -w -wi -I=/home/jaj/Documents/dlang/chess/src
+		-enable-contracts -m64 -unittest -w -wi -I=/home/jaj/Documents/dlang/chess/src \
+		-d-debug
 
 BIN = ./bin/goatchess
 OBJECTS = $(subst src, build, $(patsubst %.d, %.o, $(wildcard src/*.d)))
@@ -19,3 +20,9 @@ build/chess.a: $(CHESS)
 
 run: $(BIN)
 	./$(BIN)
+
+clean:
+	rm ./$(BIN)
+	rm ./build/*.o
+	rm ./build/*.a
+	rm -rf ./build/src
