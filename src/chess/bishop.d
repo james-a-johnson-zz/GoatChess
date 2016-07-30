@@ -15,6 +15,8 @@ void blackBishopGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
     Move m;
     m.from.row = row;
     m.from.col = col;
+    m.enPas.col = -1;
+    m.enPas.row = -1;
 
     m.piece = sb.pieces[row][col];
     m.capture = Piece.empty;
@@ -143,6 +145,8 @@ void whiteBishopGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
     Move m;
     m.from.row = row;
     m.from.col = col;
+    m.enPas.row = -1;
+    m.enPas.col = -1;
 
     m.piece = sb.pieces[row][col];
     m.capture = Piece.empty;

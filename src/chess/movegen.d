@@ -69,7 +69,7 @@ MoveList genMoves(SimpleBoard sb)
         }
     }
 
-    foreach (move; parallel(moves, 4))
+    foreach (move; parallel(moves, numThreads))
     {
         switch (sb.pieces[move.row][move.col])
         {

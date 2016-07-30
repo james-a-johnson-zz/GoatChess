@@ -15,6 +15,8 @@ void blackKingGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
 
     m.from.row = row;
     m.from.col = col;
+    m.enPas.row = -1;
+    m.enPas.col = -1;
 
     m.piece = Piece.king;
     m.capture = Piece.empty;
@@ -57,7 +59,7 @@ void blackKingGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
 
     if (sb.castlePerm & Castle.king && sb.pieces[0][6] == Piece.empty && sb.pieces[0][5] == Piece.empty)
     {
-        if (!(squareAttacked(Position(0,5), sb, WHITE) || squareAttacked(Position(0,6), sb, WHITE)))
+        if (!(squareAttacked(Position(0,5), sb, WHITE) || squareAttacked(Position(0,6), sb, WHITE) || squareAttacked(Position(0,4), sb, WHITE)))
         {
             m.to.row = 0;
             m.to.col = 6;
@@ -69,7 +71,7 @@ void blackKingGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
 
     if (sb.castlePerm & Castle.queen && sb.pieces[0][1] == Piece.empty && sb.pieces[0][2] == Piece.empty && sb.pieces[0][3] == Piece.empty)
     {
-        if (!(squareAttacked(Position(0,1), sb, WHITE) || squareAttacked(Position(0,2), sb, WHITE) || squareAttacked(Position(0,3), sb, WHITE)))
+        if (!(squareAttacked(Position(0,1), sb, WHITE) || squareAttacked(Position(0,2), sb, WHITE) || squareAttacked(Position(0,3), sb, WHITE) || squareAttacked(Position(0,4), sb, WHITE)))
         {
             m.to.row = 0;
             m.to.col = 2;
@@ -86,6 +88,8 @@ void whiteKingGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
 
     m.from.row = row;
     m.from.col = col;
+    m.enPas.row = -1;
+    m.enPas.col = -1;
 
     m.piece = Piece.King;
     m.capture = Piece.empty;
@@ -128,7 +132,7 @@ void whiteKingGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
 
     if (sb.castlePerm & Castle.King && sb.pieces[7][6] == Piece.empty && sb.pieces[7][5] == Piece.empty)
     {
-        if (!(squareAttacked(Position(7,5), sb, BLACK) || squareAttacked(Position(7,6), sb, BLACK)))
+        if (!(squareAttacked(Position(7,5), sb, BLACK) || squareAttacked(Position(7,6), sb, BLACK) || squareAttacked(Position(7,4), sb, BLACK)))
         {
             m.to.row = 7;
             m.to.col = 6;
@@ -140,7 +144,7 @@ void whiteKingGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
 
     if (sb.castlePerm & Castle.Queen && sb.pieces[7][1] == Piece.empty && sb.pieces[7][2] == Piece.empty && sb.pieces[7][3] == Piece.empty)
     {
-        if (!(squareAttacked(Position(7,1), sb, WHITE) || squareAttacked(Position(7,2), sb, WHITE) || squareAttacked(Position(7,3), sb, WHITE)))
+        if (!(squareAttacked(Position(7,1), sb, WHITE) || squareAttacked(Position(7,2), sb, WHITE) || squareAttacked(Position(7,3), sb, WHITE) || squareAttacked(Position(7,4), sb, BLACK)))
         {
             m.to.row = 7;
             m.to.col = 2;

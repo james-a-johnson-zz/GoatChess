@@ -1,5 +1,7 @@
 module chess.defs;
 
+const int numThreads = 4;
+
 alias U64 = ulong;
 
 // Colors

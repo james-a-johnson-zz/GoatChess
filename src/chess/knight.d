@@ -13,6 +13,8 @@ void blackKnightGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
     Move m;
     m.from.row = row;
     m.from.col = col;
+    m.enPas.row = -1;
+    m.enPas.col = -1;
 
     m.piece = Piece.knight;
 
@@ -95,6 +97,8 @@ void whiteKnightGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
     Move m;
     m.from.row = row;
     m.from.col = col;
+    m.enPas.row = -1;
+    m.enPas.col = -1;
 
     m.piece = Piece.Knight;
 

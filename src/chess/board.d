@@ -9,6 +9,7 @@ import chess.defs;
 import chess.move;
 import chess.position;
 
+import std.container : Array;
 import std.conv;
 import std.format : formattedRead;
 import std.random : XorshiftEngine;
@@ -71,6 +72,19 @@ static this()
 }
 
 /*
+   Used for unmaking moves.
+*/
+struct HisBoard
+{
+    Piece[8][8] pieces;
+    int ply;
+    int hply;
+    bool turn;
+    ubyte castlePerm;
+    Position enPas;
+}
+
+/*
     Notes about how this board thing works.
     Pieces - and 8x8 array of pieces that stores piece and location.
     Ply - boolean of whose turn it is. Whilte: false, Black: true.
@@ -91,7 +105,8 @@ class Board
     ubyte castlePerm;
     Position enPas;
 
-    U64 boardID;
+    Array!U64 boardIDs;
+    Array!HisBoard history;
   }
 
     this(string fen = startFen)
@@ -240,11 +255,61 @@ class Board
         string nums = fen[index .. $];
         formattedRead(nums, "%d %d", &hply, &ply);
 
-        updateKey;
+        updateKey();
+    }
+
+    // Only checks fifty move and three board repetition.
+    bool checkEnd() const
+    {
+        if (hply >= 50)
+            return true;
+
+        int count = void;
+        for (int i = 0; i < boardIDs.length; i++)
+        {
+            count = 0;
+            for (int j = i + 1; j < boardIDs.length; j++)
+                if (boardIDs[i] == boardIDs[j])
+                    count ++;
+            if (count >= 3)
+                return true;
+        }
+
+        return false;
+    }
+
+    void unMakeMove()
+    {
+        HisBoard hs = history[$-1];
+
+        pieces = hs.pieces;
+        castlePerm = hs.castlePerm;
+        ply = hs.ply;
+        hply = hs.hply;
+        turn = hs.turn;
+        enPas = hs.enPas;
+
+        deleteKey();
+        history.removeBack();
+    }
+
+    void addToHistory()
+    {
+        HisBoard hs;
+        hs.pieces = pieces;
+        hs.ply = ply;
+        hs.hply = hply;
+        hs.enPas = enPas;
+        hs.castlePerm = castlePerm;
+        hs.turn = turn;
+
+        history.insertBack(hs);
     }
 
     void makeMove(Move m)
     {
+        addToHistory();
+
         if (m.castle != 0)
         {
             if (m.castle == Castle.King)
@@ -281,15 +346,38 @@ class Board
             }
             else
                 throw new Exception("Invalid castle move.");
-
-            enPas.row = -1;
-            enPas.col = -1;
         }
+        else
+        {
+            pieces[m.to.row][m.to.col] = m.piece;
+            pieces[m.from.row][m.from.col] = Piece.empty;
+            if (m.to.row == enPas.row && m.to.col == enPas.col)
+            {
+                if (enPas.row == 2)
+                    pieces[3][enPas.col] = Piece.empty;
+                else
+                    pieces[4][enPas.col] = Piece.empty;
+            }
+        }
+
+        enPas.row = m.enPas.row;
+        enPas.col = m.enPas.col;
+
+        if (m.piece == Piece.pawn)
+            hply = 0;
+        else if (m.capture != Piece.empty)
+            hply = 0;
+        else
+            hply++;
+
+        ply++;
+        turn = !turn;
+        updateKey();
     }
 
     void updateKey()
     {
-        boardID = 0;
+         U64 boardID = 0;
 
         for (int i = 0; i < 8; i++)
         {
@@ -306,16 +394,21 @@ class Board
 
         if (enPas.row != -1)
             boardID ^= enPasKeys[enPas.row][enPas.col];
+
+        boardIDs.insertBack(boardID);
     }
 
-    U64 ID() @property
+    void deleteKey()
     {
-        return boardID;
+        boardIDs.removeBack();
     }
 
-    debug
+    U64 ID() @property const
     {
-    void print()
+        return boardIDs[$-1];
+    }
+
+    void print() const
     {
         for (int i = 0; i < 8; i++)
         {
@@ -378,7 +471,6 @@ class Board
         writeln("Turn: ", turn ? "Black" : "White");
         writeln("En Passant: ", enPas);
         writefln("Castle Permissions: %b", castlePerm);
-        writefln("Board ID: %X", boardID);
-    }
+        writefln("Board ID: %X", ID);
     }
 }

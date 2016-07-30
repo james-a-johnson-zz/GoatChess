@@ -1,4 +1,4 @@
-import chess.board;
+import game;
 
 import std.stdio;
 
@@ -8,7 +8,6 @@ void main()
 {
     writeln(welcome);
 
-    Board b = new Board();
-
-    b.print();
+    Game g = new Game();
+    g.play();
 }
