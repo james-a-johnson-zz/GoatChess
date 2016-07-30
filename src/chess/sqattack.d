@@ -178,9 +178,9 @@ bool squareAttacked(Position p, SimpleBoard sb, bool side)
         return true;
     if (row - 1 > -1 && col + 2 < 8 && sb.pieces[row-1][col+2] == piece1)
         return true;
-    if (row - 2 > -1 && col - 1 > -1 && sb.pieces[row+2][col+1] == piece1)
+    if (row - 2 > -1 && col - 1 > -1 && sb.pieces[row-2][col-1] == piece1)
         return true;
-    if (row - 1 > -1 && col - 2 > -1 && sb.pieces[row+1][col+2] == piece1)
+    if (row - 1 > -1 && col - 2 > -1 && sb.pieces[row-1][col-2] == piece1)
         return true;
 
     if (side)

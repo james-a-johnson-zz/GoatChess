@@ -94,7 +94,7 @@ void whiteKingGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
     m.piece = Piece.King;
     m.capture = Piece.empty;
 
-    if (row + 1 < 8 && sb.pieces[row+1][col] > Piece.king)
+    if (row + 1 < 8 && sb.pieces[row+1][col] < Piece.Pawn)
     {
         m.to.row = row + 1;
         m.to.col = col;
@@ -103,16 +103,16 @@ void whiteKingGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
             ml.insertBack(m);
     }
 
-    if (row - 1 > -1 && sb.pieces[row-1][col] > Piece.king)
+    if (row - 1 > -1 && sb.pieces[row-1][col] < Piece.Pawn)
     {
         m.to.row = row - 1;
         m.to.col = col;
-        m.capture = sb.pieces[row+1][col];
+        m.capture = sb.pieces[row-1][col];
         synchronized (ml.lock)
             ml.insertBack(m);
     }
 
-    if (col + 1 < 8 && sb.pieces[row][col+1] > Piece.king)
+    if (col + 1 < 8 && sb.pieces[row][col+1] < Piece.Pawn)
     {
         m.to.row = row;
         m.to.col = col + 1;
@@ -121,7 +121,7 @@ void whiteKingGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
             ml.insertBack(m);
     }
 
-    if (col - 1 > -1 && sb.pieces[row][col+1] > Piece.king)
+    if (col - 1 > -1 && sb.pieces[row][col+1] < Piece.Pawn)
     {
         m.to.row = row;
         m.to.col = col - 1;

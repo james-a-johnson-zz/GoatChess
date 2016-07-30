@@ -1,6 +1,6 @@
 module chess.defs;
 
-const int numThreads = 4;
+const int numThreads = 1;
 
 alias U64 = ulong;
 

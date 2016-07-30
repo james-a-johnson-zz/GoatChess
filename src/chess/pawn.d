@@ -88,7 +88,7 @@ void blackPawnGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
         m.capture = Piece.empty;
     }
 
-    if (col + 1 < 9 && sb.pieces[row+1][col+1] > Piece.king)
+    if (col + 1 < 8 && sb.pieces[row+1][col+1] > Piece.king)
     {
         m.to.row = row + 1;
         m.to.col = col + 1;
@@ -132,7 +132,7 @@ void whitePawnGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
     m.from.row = row;
     m.from.col = col;
 
-    m.piece = Piece.pawn;
+    m.piece = Piece.Pawn;
     m.capture = Piece.empty;
     m.enPas.row = -1;
     m.enPas.col = -1;
@@ -140,6 +140,8 @@ void whitePawnGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
 
     if (sb.pieces[row-1][col] == Piece.empty)
     {
+        m.to.row = row-1;
+        m.to.col = col;
         if (row - 1 == 0)
         {
             synchronized (ml.lock)
@@ -161,11 +163,11 @@ void whitePawnGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
                 ml.insertBack(m);
         }
 
-        if (row == 6 && sb.pieces[6][col-2] == Piece.empty)
+        if (row == 6 && sb.pieces[4][col] == Piece.empty)
         {
             m.to.row = 4;
             m.to.col = col;
-            m.enPas.row = 3;
+            m.enPas.row = 5;
             m.enPas.col = col;
             synchronized (ml.lock)
                 ml.insertBack(m);
@@ -202,7 +204,7 @@ void whitePawnGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
         m.capture = Piece.empty;
     }
 
-    if (col + 1 < 9 && sb.pieces[row-1][col+1] < Piece.Pawn && sb.pieces[row-1][col+1] != Piece.empty)
+    if (col + 1 < 8 && sb.pieces[row-1][col+1] < Piece.Pawn && sb.pieces[row-1][col+1] != Piece.empty)
     {
         m.to.row = row - 1;
         m.to.col = col + 1;

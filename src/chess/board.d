@@ -8,6 +8,7 @@ module chess.board;
 import chess.defs;
 import chess.move;
 import chess.position;
+import chess.simpleboard;
 
 import std.container : Array;
 import std.conv;
@@ -101,17 +102,30 @@ class Board
 
     int ply;
     int hply;
-    bool turn;
     ubyte castlePerm;
     Position enPas;
 
     Array!U64 boardIDs;
     Array!HisBoard history;
   }
+    bool turn;
 
     this(string fen = startFen)
     {
         readFen(fen);
+    }
+
+    Board dup() const
+    {
+        Board d = new Board();
+
+        d.pieces = pieces;
+        d.ply = ply;
+        d.hply = ply;
+        d.castlePerm = castlePerm;
+        d.enPas = enPas;
+
+        return d;
     }
 
     void readFen(string fen)
@@ -278,6 +292,16 @@ class Board
         return false;
     }
 
+    bool repeatedBoard() const
+    {
+        for (int i = 0; i < boardIDs.length-1; i++)
+        {
+            if (boardIDs[i] == boardIDs[$-1])
+                return true;
+        }
+        return false;
+    }
+
     void unMakeMove()
     {
         HisBoard hs = history[$-1];
@@ -296,6 +320,7 @@ class Board
     void addToHistory()
     {
         HisBoard hs;
+
         hs.pieces = pieces;
         hs.ply = ply;
         hs.hply = hply;
@@ -377,7 +402,7 @@ class Board
 
     void updateKey()
     {
-         U64 boardID = 0;
+        U64 boardID = 0;
 
         for (int i = 0; i < 8; i++)
         {
@@ -396,6 +421,18 @@ class Board
             boardID ^= enPasKeys[enPas.row][enPas.col];
 
         boardIDs.insertBack(boardID);
+    }
+
+    SimpleBoard SB() const @property
+    {
+        SimpleBoard sb;
+
+        sb.pieces = pieces;
+        sb.turn = turn;
+        sb.castlePerm = castlePerm;
+        sb.enPas = enPas;
+
+        return sb;
     }
 
     void deleteKey()
@@ -466,11 +503,12 @@ class Board
         writeln("  A B C D E F G H");
         writeln();
 
-        writeln("Moves: ", ply);
+        writeln("Move(s): ", ply);
         writeln("Fifty Move Counter: ", hply);
         writeln("Turn: ", turn ? "Black" : "White");
         writeln("En Passant: ", enPas);
         writefln("Castle Permissions: %b", castlePerm);
         writefln("Board ID: %X", ID);
+        write("\n\n");
     }
 }
