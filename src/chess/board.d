@@ -24,7 +24,8 @@ import std.string;
 
 // The fen string that represents the starting position of a normal game of chess.
 // TODO(jjohnson): Maybe add some other game types?
-string startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+// string startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+string startFen = "2rr3k/pp3pp1/1nnqbN1p/3pN3/2pP4/2p3Q1/PPB4P/R4RK1 w - - 10 10";
 
 /*
     A bunch of random numbers to use for creating the unique board ID.
@@ -272,6 +273,11 @@ class Board
         updateKey();
     }
 
+    Piece opIndex(int a, int b) const
+    {
+        return pieces[a][b];
+    }
+
     // Only checks fifty move and three board repetition.
     bool checkEnd() const
     {
@@ -383,6 +389,8 @@ class Board
                 else
                     pieces[4][enPas.col] = Piece.empty;
             }
+            if (m.promotion != Piece.empty)
+                pieces[m.to.row][m.to.col] = m.promotion;
         }
 
         enPas.row = m.enPas.row;
@@ -482,7 +490,7 @@ class Board
                         write("R ");
                         break;
                     case Piece.Knight:
-                        write("K ");
+                        write("N ");
                         break;
                     case Piece.Bishop:
                         write("B ");

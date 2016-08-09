@@ -7,6 +7,9 @@ import chess.movelist;
 
 import player.player;
 import player.human;
+import player.ai;
+
+import std.stdio;
 
 class Game
 {
@@ -18,12 +21,13 @@ class Game
     {
         b = new Board();
 
-        white = new Human();
-        black = new Human();
+        white = new AI();
+        black = new AI();
     }
 
     void play()
     {
+        /*
         MoveList ml;
         Move m;
         bool valid;
@@ -69,5 +73,10 @@ class Game
 
             b.makeMove(m);
         }
+        */
+
+        b.print();
+        white.updateBoard(b);
+        white.getMove();
     }
 }

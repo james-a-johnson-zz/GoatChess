@@ -1,7 +1,7 @@
 CC = ldc2
 FLAGS = -O2 -boundscheck=on -enable-asserts -enable-color -enable-inlining \
 		-enable-contracts -m64 -unittest -w -wi -I=/home/jaj/Documents/dlang/GoatChess/src \
-		-d-debug
+		-d-debug -gc -v-cg -op -oq
 
 BIN = ./bin/goatchess
 OBJECTS = $(subst src, build, $(patsubst %.d, %.o, $(wildcard src/*.d)))

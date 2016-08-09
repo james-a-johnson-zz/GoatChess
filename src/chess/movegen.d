@@ -137,6 +137,7 @@ MoveList genMoves(SimpleBoard sb)
     return mlFinal;
 }
 
+/+
 /* TESTING */
 unittest
 {
@@ -177,3 +178,4 @@ unittest
 
     assert(moves.length == 4);
 }
++/

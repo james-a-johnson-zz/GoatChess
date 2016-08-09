@@ -21,21 +21,21 @@ bool squareAttacked(Position p, SimpleBoard sb, bool side)
     // These have to be entirely split because it changes movement.
     if (side)
     {
-        if (row - 1 > -1)
+        if (row + 1 < 8)
         {
-            if (col + 1 < 8 && sb.pieces[row-1][col+1] == Piece.pawn)
+            if (col + 1 < 8 && sb.pieces[row+1][col+1] == Piece.pawn)
                 return true;
-            if (col -1 > -1 && sb.pieces[row-1][col-1] == Piece.pawn)
+            if (col - 1 > -1 && sb.pieces[row+1][col-1] == Piece.pawn)
                 return true;
         }
     }
     else
     {
-        if (row + 1 < 8)
+        if (row - 1 > -1)
         {
-            if (col + 1 < 8 && sb.pieces[row+1][col+1] == Piece.Pawn)
+            if (col + 1 < 8 && sb.pieces[row-1][col+1] == Piece.Pawn)
                 return true;
-            if (col - 1 > -1 && sb.pieces[row+1][col-1] == Piece.Pawn)
+            if (col - 1 > -1 && sb.pieces[row-1][col-1] == Piece.Pawn)
                 return true;
         }
     }
@@ -172,7 +172,7 @@ bool squareAttacked(Position p, SimpleBoard sb, bool side)
         return true;
     if (row + 2 < 8 && col - 1 > -1 && sb.pieces[row+2][col-1] == piece1)
         return true;
-    if (row + 1 < 8 && col - 2 > -1 && sb.pieces[row+1][col+2] == piece1)
+    if (row + 1 < 8 && col - 2 > -1 && sb.pieces[row+1][col-2] == piece1)
         return true;
     if (row - 2 > -1 && col + 1 < 8 && sb.pieces[row-2][col+1] == piece1)
         return true;
@@ -183,6 +183,8 @@ bool squareAttacked(Position p, SimpleBoard sb, bool side)
     if (row - 1 > -1 && col - 2 > -1 && sb.pieces[row-1][col-2] == piece1)
         return true;
 
+
+    // Check kings.
     if (side)
         piece1 = Piece.king;
     else

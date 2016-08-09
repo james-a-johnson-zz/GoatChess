@@ -120,7 +120,8 @@ void blackPawnGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
     {
         m.to.row = sb.enPas.row;
         m.to.col = sb.enPas.col;
-        ml.insertBack(m);
+        synchronized (ml.lock)
+            ml.insertBack(m);
     }
 }
 

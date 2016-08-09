@@ -52,7 +52,43 @@ void blackKingGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
     {
         m.to.row = row;
         m.to.col = col - 1;
-        m.capture = sb.pieces[row][col+1];
+        m.capture = sb.pieces[row][col-1];
+        synchronized (ml.lock)
+            ml.insertBack(m);
+    }
+
+    if (row + 1 < 8 && col + 1 < 8 && (sb.pieces[row+1][col+1] == Piece.empty || sb.pieces[row+1][col+1] > Piece.king))
+    {
+        m.to.row = row + 1;
+        m.to.col = col + 1;
+        m.capture = sb.pieces[row+1][col+1];
+        synchronized (ml.lock)
+            ml.insertBack(m);
+    }
+
+    if (row + 1 < 8 && col - 1 > -1 && (sb.pieces[row+1][col-1] == Piece.empty || sb.pieces[row+1][col-1] > Piece.king))
+    {
+        m.to.row = row + 1;
+        m.to.col = col - 1;
+        m.capture = sb.pieces[row+1][col-1];
+        synchronized (ml.lock)
+            ml.insertBack(m);
+    }
+
+    if (row - 1 > -1 && col + 1 < 8 && (sb.pieces[row-1][col+1] == Piece.empty || sb.pieces[row-1][col+1] > Piece.king))
+    {
+        m.to.row = row - 1;
+        m.to.col = col + 1;
+        m.capture = sb.pieces[row-1][col+1];
+        synchronized (ml.lock)
+            ml.insertBack(m);
+    }
+
+    if (row - 1 > -1 && col - 1 > -1 && (sb.pieces[row-1][col-1] == Piece.empty || sb.pieces[row-1][col-1] > Piece.king))
+    {
+        m.to.row = row - 1;
+        m.to.col = col - 1;
+        m.capture = sb.pieces[row-1][col-1];
         synchronized (ml.lock)
             ml.insertBack(m);
     }
@@ -121,11 +157,47 @@ void whiteKingGen(immutable SimpleBoard sb, ref MoveList ml, int row, int col)
             ml.insertBack(m);
     }
 
-    if (col - 1 > -1 && sb.pieces[row][col+1] < Piece.Pawn)
+    if (col - 1 > -1 && sb.pieces[row][col-1] < Piece.Pawn)
     {
         m.to.row = row;
         m.to.col = col - 1;
-        m.capture = sb.pieces[row][col+1];
+        m.capture = sb.pieces[row][col-1];
+        synchronized (ml.lock)
+            ml.insertBack(m);
+    }
+
+    if (row + 1 < 8 && col + 1 < 8 && sb.pieces[row+1][col+1] < Piece.Pawn)
+    {
+        m.to.row = row + 1;
+        m.to.col = col + 1;
+        m.capture = sb.pieces[row+1][col+1];
+        synchronized (ml.lock)
+            ml.insertBack(m);
+    }
+
+    if (row + 1 < 8 && col - 1 > -1 && sb.pieces[row+1][col-1] < Piece.pawn)
+    {
+        m.to.row = row + 1;
+        m.to.col = col - 1;
+        m.capture = sb.pieces[row+1][col-1];
+        synchronized (ml.lock)
+            ml.insertBack(m);
+    }
+
+    if (row - 1 > -1 && col + 1 < 8 && sb.pieces[row-1][col+1] < Piece.pawn)
+    {
+        m.to.row = row - 1;
+        m.to.col = col + 1;
+        m.capture = sb.pieces[row-1][col+1];
+        synchronized (ml.lock)
+            ml.insertBack(m);
+    }
+
+    if (row - 1 > -1 && col - 1 > -1 && sb.pieces[row-1][col-1] < Piece.pawn)
+    {
+        m.to.row = row - 1;
+        m.to.col = col - 1;
+        m.capture = sb.pieces[row-1][col-1];
         synchronized (ml.lock)
             ml.insertBack(m);
     }
