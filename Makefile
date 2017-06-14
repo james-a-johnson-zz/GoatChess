@@ -1,6 +1,7 @@
 CC = ldc2
+CURRENT_DIR = $(shell pwd)/src
 FLAGS = -O2 -boundscheck=on -enable-asserts -enable-color -enable-inlining \
-		-enable-contracts -m64 -unittest -w -wi -I=/home/jaj/Documents/dlang/GoatChess/src \
+		-enable-contracts -m64 -unittest -w -wi -I=$(CURRENT_DIR) \
 		-d-debug -gc -v-cg -op -oq
 
 BIN = ./bin/goatchess
